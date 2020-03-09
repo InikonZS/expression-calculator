@@ -19,7 +19,12 @@ function op(a, b, o) {
 	if (o == '-') { return a - b; }
 	if (o == '*') { return a * b; }
 	//if (o=='/'){return a/b;}
-	if (o == "/") { if (b == 0) { throw "TypeError: Division by zero."; } return a / b; }
+	if (o == "/") { 
+		if (b == 0) { 
+			throw "TypeError: Division by zero."; 
+		} 
+		return a / b; 
+	}
 }
 
 function calcExpression(expression) {
@@ -29,10 +34,16 @@ function calcExpression(expression) {
 		var aop;
 		var ope;
 		var res;
-		if (Array.isArray(ar[0])) { res = calcTree(ar.shift()); } else { res = ar.shift(); }
+		if (Array.isArray(ar[0])) {
+			res = calcTree(ar.shift()); 
+		} else { 
+			res = ar.shift(); 
+		}
 		while (ar.length > 0) {
 			ope = ar.shift();
-			if (Array.isArray(ar[0])) { ar[0] = calcTree(ar[0]); }
+			if (Array.isArray(ar[0])) { 
+				ar[0] = calcTree(ar[0]); 
+			}
 			aop = ar.shift();
 			res = op(+res, +aop, ope);
 		}
@@ -51,7 +62,14 @@ function getTree(expression) {
 		var cn = '';
 		while (ar.length > 0) {
 			cv = ar.shift();
-			if (isNum(cv)) { cn += cv; } else { if (cn != '') { head.push(cn); cn = ''; } }
+			if (isNum(cv)) { 
+				cn += cv; 
+			} else { 
+				if (cn != '') { 
+					head.push(cn); 
+					cn = ''; 
+				} 
+			}
 			if (isSign(cv)) { head.push(cv); }
 			//if (isSign(cv)){head[head.length-1]+=(cv);}
 			if (cv == '(') {
