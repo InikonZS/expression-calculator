@@ -27,9 +27,6 @@ function op(a, b, o) {
 	}
 }
 
-//changed all shifts to pop;
-// last result - 20k ops
-// now 200k
 function calcExpression(expression) {
 	var tree = getTree(prior(expression));
 
@@ -37,23 +34,17 @@ function calcExpression(expression) {
 		var aop;
 		var ope;
 		var res;
-		ar=ar.reverse();
-		var l=ar.length-1;
-		if (Array.isArray(ar[l])) {
-			l--;
-			res = calcTree(ar.pop()); 
+		if (Array.isArray(ar[0])) {
+			res = calcTree(ar.shift()); 
 		} else { 
-			res = ar.pop(); 
-			l--;
+			res = ar.shift(); 
 		}
-		while (l > 0) {
-			ope = ar.pop();
-			l--;
-			if (Array.isArray(ar[l])) { 
-				ar[l] = calcTree(ar[l]); 
+		while (ar.length > 0) {
+			ope = ar.shift();
+			if (Array.isArray(ar[0])) { 
+				ar[0] = calcTree(ar[0]); 
 			}
-			aop = ar.pop();
-			l--;
+			aop = ar.shift();
 			res = op(+res, +aop, ope);
 		}
 		return res;
@@ -63,16 +54,14 @@ function calcExpression(expression) {
 }
 
 function getTree(expression) {
-	var a = expression.split('').reverse();
+	var a = expression.split('');
 	var tree = [];
 
 	var parseTree = function (head, ar) { //warning! func mutate head and arr
 		var cv = '';
 		var cn = '';
-		
 		while (ar.length > 0) {
-			//cv = ar.shift(); // change shift to pop // last result 12k calcs
-			cv=ar.pop();
+			cv = ar.shift();
 			if (isNum(cv)) { 
 				cn += cv; 
 			} else { 

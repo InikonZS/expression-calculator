@@ -440,3 +440,43 @@ describe("Hard", function() {
         expect(Number(expressionCalculator(expr).toFixed(4))).to.equal(result);
     });
 })
+
+
+//////ULTRA EXPRESSION GENERATOR
+function generateExpression(length){
+    let signs=['+','-','+','-','+','-','*','/','/','/','/','/','/'];
+    let res='';
+    let bracketConfig='()()(()())(((()())()())())()'.split('').reverse();
+    for (let i = 0; i<length; i++){
+        let sign=signs[Math.trunc((Math.random()*(signs.length)))];
+        let num;
+        if ((sign=="*") || (sign=="/")){
+            num=Math.trunc((Math.random()*14)+1);
+        } else {
+            num=Math.trunc((Math.random()*150)+1);
+        }
+        let cls=98;
+        if (bracketConfig.length*4 > (length-i)){
+            cls=0;
+        }
+        if (Math.trunc((Math.random()*100))>=cls){
+            let br=bracketConfig.pop();
+            if (br=='(') {sign=sign+br;}
+            if (br==')') {sign=br+sign;}
+        }
+        res+=num+sign;
+    }
+    res=res+'1';
+    //console.log(res);
+    return res;
+}
+describe("Ultra", function() {
+    it("Nested brackets 100k ultra test", function() {
+        const expr = generateExpression(100000);
+
+        var result= Number(new Function ('return '+ expr)().toFixed(4));
+        console.log(result);
+
+        expect(Number(expressionCalculator(expr).toFixed(4))).to.equal(result);
+    });
+});
